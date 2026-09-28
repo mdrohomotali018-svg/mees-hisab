@@ -1,167 +1,1310 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#4f46e5">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Mess Hisab">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icons/icon-192.png">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
-<title>Mess Hisab</title>
-<style>
-:root{--p:#4f46e5;--bg:#f5f7fb;--card:#fff;--text:#182033;--muted:#687184;--line:#e3e7ef;--green:#087f5b;--red:#c92a2a}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-header{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:14px 16px}
-h1{margin:0;font-size:25px}h2{font-size:20px;margin:0 0 12px}.sub{color:var(--muted);font-size:13px;margin-top:4px}
-nav{display:flex;gap:8px;overflow:auto;padding:10px 12px;background:var(--bg);position:sticky;top:74px;z-index:4}
-nav button{white-space:nowrap;border:0;border-radius:999px;padding:10px 14px;background:#fff;color:#4b5563;font-size:14px}nav button.on{background:var(--p);color:#fff}
-main{max-width:850px;margin:auto;padding:10px 12px 40px}.tab{display:none}.tab.on{display:block}
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin:10px 0;box-shadow:0 4px 18px #17203308}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}input,select,button,textarea{font:inherit}input,select,textarea{width:100%;padding:11px;border:1px solid #d7dce6;border-radius:11px;background:#fff;color:var(--text)}
-button{border:0;border-radius:11px;padding:10px 13px;background:var(--p);color:#fff;font-weight:600;cursor:pointer}.secondary{background:#eef0ff;color:#4038a8}.danger{background:#fff0f0;color:#b42318}.green{background:#e9f8f1;color:#087f5b}.dark{background:#202938}
-.row{display:flex;gap:8px;align-items:center;justify-content:space-between}.row>*{min-width:0}.small{font-size:12px;color:var(--muted)}.money{font-size:25px;font-weight:750}.good{color:var(--green);font-weight:700}.bad{color:var(--red);font-weight:700}
-.item{border:1px solid var(--line);border-radius:14px;padding:12px;margin:8px 0}.item .actions{display:flex;gap:6px;margin-top:8px}.pill{display:inline-block;border-radius:999px;padding:4px 8px;font-size:11px;background:#eef0ff;color:#4038a8}
-table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line)}th{color:var(--muted);font-weight:600}
-hr{border:0;border-top:1px solid var(--line);margin:14px 0}.notice{background:#fff8db;border:1px solid #f3df91;padding:11px;border-radius:12px;font-size:13px}
-footer{padding:10px;text-align:center;color:var(--muted);font-size:12px}
-@media(max-width:560px){.grid3{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr 1fr}button{padding:10px 11px}}
-</style>
-<script>if("serviceWorker" in navigator){addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));}</script></head>
-<body>
-<header>
-  <h1>🏠 Mess Hisab</h1>
-  <div class="sub">Offline • এই ফোনেই হিসাব save হবে • Chrome Home Screen friendly</div>
-</header>
-<nav id="nav">
-  <button class="on" data-tab="summary">📊 Summary</button>
-  <button data-tab="members">👥 Members</button>
-  <button data-tab="market">🛒 Market</button>
-  <button data-tab="shops">🏪 Shops</button>
-  <button data-tab="backup">⚙️ Backup</button>
-</nav>
-<main>
-<section id="summary" class="tab on"></section>
-<section id="members" class="tab"></section>
-<section id="market" class="tab"></section>
-<section id="shops" class="tab"></section>
-<section id="backup" class="tab"></section>
-</main>
-<footer>Mess Hisab • Data stays on this device</footer>
-<script>
-const KEY='mess_hisab_v3';
-const fresh={
- month:'এই মাস', monthDays:30,
- members:['Rokib','Rahmat ali','Sojib','Member 4','Member 5','Member 6','Member 7'].map((name,i)=>({id:'m'+Date.now()+i,name,days:30,arrival:'',departure:''})),
- market:[], shops:[{id:'s1',name:'Shop 1'},{id:'s2',name:'Shop 2'},{id:'s3',name:'Shop 3'}],
- shopTx:[], deposits:[]
-};
-let db=JSON.parse(localStorage.getItem(KEY)||'null')||fresh;
-function save(){localStorage.setItem(KEY,JSON.stringify(db));render()}
-function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function eur(n){return '€'+Number(n||0).toFixed(2)}
-function daysFor(m){
- if(m.arrival && m.departure){let a=+m.arrival,b=+m.departure;return Math.max(0,Math.min(db.monthDays,b)-Math.min(db.monthDays,a))}
- if(m.arrival&&!m.departure)return Math.max(0,db.monthDays-(+m.arrival)+1);
- return Math.min(db.monthDays,Math.max(0,+m.days||0))
-}
-function setTab(id){document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x.id===id));document.querySelectorAll('#nav button').forEach(x=>x.classList.toggle('on',x.dataset.tab===id))}
-document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{setTab(b.dataset.tab);render()});
+<meta name="theme-color" content="#5b4ee8">
+<title>🏠 Mess Hisab</title>
 
-function totals(){
- let market=db.market.reduce((a,x)=>a+Number(x.amount||0),0);
- let shopDue=db.shopTx.filter(x=>x.type==='due').reduce((a,x)=>a+Number(x.amount||0),0);
- let expense=market+shopDue;
- let pd=db.members.reduce((a,m)=>a+daysFor(m),0);
- let rate=pd?expense/pd:0;
- let dep=db.deposits.reduce((a,x)=>a+Number(x.amount||0),0);
- return {market,shopDue,expense,pd,rate,dep}
+<style>
+*{box-sizing:border-box}
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f3f4ff;
+color:#18223b;
 }
-function memberPaid(id){
- let market=db.market.filter(x=>x.memberId===id).reduce((a,x)=>a+Number(x.amount||0),0);
- let dep=db.deposits.filter(x=>x.memberId===id).reduce((a,x)=>a+Number(x.amount||0),0);
- let shopPaid=db.shopTx.filter(x=>x.type==='payment'&&x.memberId===id).reduce((a,x)=>a+Number(x.amount||0),0);
- return market+dep+shopPaid;
+header{
+background:linear-gradient(135deg,#5146e5,#8b5cf6);
+color:white;
+padding:22px 16px;
+border-radius:0 0 25px 25px;
 }
-function renderSummary(){
- const t=totals();
- let cards=db.members.map(m=>{
-   let share=daysFor(m)*t.rate, paid=memberPaid(m), bal=paid-share;
-   return `<div class="item"><div class="row"><b>${esc(m.name)}</b><span class="pill">${daysFor(m)} days</span></div>
-   <div class="small">Share ${eur(share)} • Contributed ${eur(paid)}</div>
-   <div class="${bal>=0?'good':'bad'}">${bal>=0?'পাবে':'দেবে'} ${eur(Math.abs(bal))}</div></div>`
- }).join('');
- document.getElementById('summary').innerHTML=`
- <div class="card"><div class="row"><div><h2>📊 ${esc(db.month)}</h2><div class="small">Month days: ${db.monthDays}</div></div><button class="secondary" onclick="printReport()">🖨️ PDF / Print</button></div>
- <div class="grid" style="margin-top:12px">
- <div><div class="small">Total expense</div><div class="money">${eur(t.expense)}</div></div>
- <div><div class="small">Person-days</div><div class="money">${t.pd}</div></div>
- <div><div class="small">Daily rate</div><div class="money">${eur(t.rate)}</div></div>
- <div><div class="small">Deposits</div><div class="money">${eur(t.dep)}</div></div>
- </div></div>
- <div class="card"><h2>👥 Final pay / receive</h2>${cards||'<div class="small">No members</div>'}</div>
- <div class="card"><h2>🏪 Shop balances</h2>${db.shops.map(s=>{let d=db.shopTx.filter(x=>x.shopId===s.id&&x.type==='due').reduce((a,x)=>a+Number(x.amount||0),0);let p=db.shopTx.filter(x=>x.shopId===s.id&&x.type==='payment').reduce((a,x)=>a+Number(x.amount||0),0);return `<div class="row item"><b>${esc(s.name)}</b><span>Due ${eur(d)} • Paid ${eur(p)} • <strong>Balance ${eur(d-p)}</strong></span></div>`}).join('')}</div>
- <div class="notice">হিসাবের নিয়ম: Market খরচ + Shop-এর নতুন due = মোট expense। Shop payment নিজে expense নয়; যে member payment করেছে সেটি তার contribution হিসেবে ধরা হয়। Deposit-ও contribution হিসেবে ধরা হয়।</div>`;
+header h1{margin:0;font-size:28px}
+header p{margin:7px 0 0;opacity:.9}
+
+nav{
+display:flex;
+gap:8px;
+overflow-x:auto;
+padding:12px;
+background:#f3f4ff;
+position:sticky;
+top:0;
+z-index:10;
 }
-function renderMembers(){
- document.getElementById('members').innerHTML=`<div class="card"><h2>👥 Members</h2>
- <div class="grid"><div><label>Month name</label><input id="month" value="${esc(db.month)}"></div><div><label>Month days</label><input id="mdays" type="number" min="1" value="${db.monthDays}"></div></div>
- <button style="margin-top:10px" onclick="db.month=document.getElementById('month').value||'এই মাস';db.monthDays=+document.getElementById('mdays').value||30;db.members.forEach(m=>{if(!m.arrival&&!m.departure)m.days=db.monthDays});save()">Save month</button>
- ${db.members.map((m,i)=>`<div class="item"><div class="row"><b>${esc(m.name)}</b><button class="danger" onclick="delMember(${i})">Delete</button></div>
- <div class="grid" style="margin-top:8px"><div><label>Name</label><input value="${esc(m.name)}" onchange="db.members[${i}].name=this.value;save()"></div>
- <div><label>Days (no dates)</label><input type="number" min="0" max="${db.monthDays}" value="${daysFor(m)}" onchange="db.members[${i}].days=+this.value;db.members[${i}].arrival='';db.members[${i}].departure='';save()"></div>
- <div><label>Arrival day (optional)</label><input type="number" min="1" max="${db.monthDays}" value="${m.arrival}" placeholder="e.g. 12" onchange="db.members[${i}].arrival=this.value;save()"></div>
- <div><label>Departure day (optional)</label><input type="number" min="1" max="${db.monthDays}" value="${m.departure}" placeholder="e.g. 24" onchange="db.members[${i}].departure=this.value;save()"></div></div>
- <div class="small" style="margin-top:6px">${m.arrival&&m.departure?`Auto days: ${daysFor(m)} (যেমন 12→24 = 12)`:'No arrival/departure = full month / manual days'}</div></div>`).join('')}
- <button onclick="addMember()">➕ Add member</button></div>`;
+nav button{
+white-space:nowrap;
+width:auto;
+margin:0;
+border:0;
+background:white;
+color:#334155;
+padding:12px 18px;
+border-radius:25px;
+font-weight:bold;
 }
-function addMember(){db.members.push({id:'m'+Date.now(),name:'New member',days:db.monthDays,arrival:'',departure:''});save()}
-function delMember(i){if(confirm('এই member delete করবেন?')){let id=db.members[i].id;db.market=db.market.filter(x=>x.memberId!==id);db.deposits=db.deposits.filter(x=>x.memberId!==id);db.shopTx=db.shopTx.map(x=>x.memberId===id?({...x,memberId:''}):x);db.members.splice(i,1);save()}}
-function memberOptions(selected=''){return `<option value="">-- member --</option>`+db.members.map(m=>`<option value="${m.id}" ${m.id===selected?'selected':''}>${esc(m.name)}</option>`).join('')}
-function renderMarket(){
- document.getElementById('market').innerHTML=`<div class="card"><h2>🛒 Market / Expenses</h2>
- <div class="grid"><div><label>Member who paid</label><select id="mm">${memberOptions()}</select></div><div><label>Amount (€)</label><input id="ma" type="number" step="0.01" placeholder="0.00"></div><div><label>Date</label><input id="mdate" type="number" min="1" max="${db.monthDays}" placeholder="Day"></div><div><label>Note</label><input id="mnote" placeholder="Groceries"></div></div>
- <button style="margin-top:10px" onclick="addMarket()">➕ Add expense</button></div>
- <div class="card">${db.market.slice().reverse().map((x,ri)=>{let real=db.market.length-1-ri;let n=db.members.find(m=>m.id===x.memberId)?.name||'Unknown';return `<div class="item"><div class="row"><b>${esc(n)}</b><b>${eur(x.amount)}</b></div><div class="small">Day ${esc(x.date)} • ${esc(x.note||'')}</div><button class="danger" onclick="db.market.splice(${real},1);save()">Delete</button></div>`}).join('')||'<div class="small">No market expenses</div>'}</div>
- <div class="card"><h2>💶 Cash deposits</h2><div class="grid"><div><label>Member</label><select id="dm">${memberOptions()}</select></div><div><label>Amount (€)</label><input id="da" type="number" step="0.01"></div></div><button style="margin-top:10px" onclick="addDeposit()">➕ Add deposit</button>
- ${db.deposits.slice().reverse().map((x,ri)=>{let real=db.deposits.length-1-ri,n=db.members.find(m=>m.id===x.memberId)?.name||'Unknown';return `<div class="item"><div class="row"><b>${esc(n)}</b><b>${eur(x.amount)}</b></div><button class="danger" onclick="db.deposits.splice(${real},1);save()">Delete</button></div>`}).join('')}</div>`;
+nav button.active{
+background:#5b4ee8;
+color:white;
 }
-function addMarket(){let amount=+ma.value;if(!amount)return;db.market.push({memberId:mm.value,amount,date:mdate.value,note:mnote.value});save()}
-function addDeposit(){let amount=+da.value;if(!amount)return;db.deposits.push({memberId:dm.value,amount});save()}
-function renderShops(){
- document.getElementById('shops').innerHTML=`<div class="card"><h2>🏪 Shops</h2>${db.shops.map((s,i)=>`<div class="item"><div class="grid"><div><label>Shop name</label><input value="${esc(s.name)}" onchange="db.shops[${i}].name=this.value;save()"></div><div><label>Actions</label><button class="danger" onclick="delShop(${i})">Delete shop</button></div></div></div>`).join('')}
- <button onclick="db.shops.push({id:'s'+Date.now(),name:'New shop'});save()">➕ Add shop</button></div>
- <div class="card"><h2>🧾 Shop debt / repayment</h2>
- <div class="grid"><div><label>Shop</label><select id="stshop">${db.shops.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('')}</select></div>
- <div><label>Type</label><select id="sttype"><option value="due">Due / purchase</option><option value="payment">Payment / repayment</option></select></div>
- <div><label>Amount (€)</label><input id="stamt" type="number" step="0.01"></div><div><label>Day</label><input id="stdate" type="number" min="1" max="${db.monthDays}"></div>
- <div><label>Member (only for payment)</label><select id="stmem">${memberOptions()}</select></div><div><label>Note</label><input id="stnote"></div></div>
- <button style="margin-top:10px" onclick="addShopTx()">➕ Add shop transaction</button></div>
- <div class="card">${db.shopTx.slice().reverse().map((x,ri)=>{let real=db.shopTx.length-1-ri,s=db.shops.find(s=>s.id===x.shopId)?.name||'Deleted shop',n=db.members.find(m=>m.id===x.memberId)?.name||'';return `<div class="item"><div class="row"><b>${esc(s)}</b><b>${x.type==='due'?'Due':'Payment'} ${eur(x.amount)}</b></div><div class="small">Day ${esc(x.date)} ${n?'• '+esc(n):''} • ${esc(x.note||'')}</div><button class="danger" onclick="db.shopTx.splice(${real},1);save()">Delete</button></div>`}).join('')||'<div class="small">No shop transactions</div>'}</div>`;
+
+.container{
+max-width:750px;
+margin:auto;
+padding:12px;
 }
-function addShopTx(){let amount=+stamt.value;if(!amount)return;db.shopTx.push({shopId:stshop.value,type:sttype.value,amount,date:stdate.value,memberId:stmem.value,note:stnote.value});save()}
-function delShop(i){if(confirm('Shop এবং তার transactions delete করবেন?')){let id=db.shops[i].id;db.shopTx=db.shopTx.filter(x=>x.shopId!==id);db.shops.splice(i,1);save()}}
-function renderBackup(){
- document.getElementById('backup').innerHTML=`<div class="card"><h2>⚙️ Backup & Restore</h2><p class="small">এই ফোনের browser storage-এ data save হয়। ফোন বদলানোর আগে backup নাও।</p>
- <button onclick="downloadBackup()">⬇️ Backup file</button>
- <div style="margin-top:10px"><label>Restore backup JSON</label><input type="file" id="restoreFile" accept=".json"></div>
- <button class="secondary" style="margin-top:8px" onclick="restoreBackup()">Restore</button>
- <hr><button class="danger" onclick="if(confirm('সব হিসাব মুছে যাবে। নিশ্চিত?')){localStorage.removeItem(KEY);location.reload()}">Clear all data</button></div>
- <div class="card"><h2>📱 Home Screen</h2><div class="notice">Chrome-এ এই পেজ খুলে ⋮ menu → <b>Add to Home screen</b> / <b>Install app</b> দেখলে সেটি চাপো। যদি Chrome local file-এর জন্য অপশন না দেখায়, এই HTML-কে online HTTPS address-এ host করতে হবে—তখন এটি proper installable PWA হবে।</div></div>`;
+
+.card{
+background:white;
+border-radius:20px;
+padding:17px;
+margin:14px 0;
+box-shadow:0 4px 18px #00000010;
 }
-function downloadBackup(){let blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='mess-hisab-backup.json';a.click()}
-function restoreBackup(){let f=restoreFile.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{db=JSON.parse(r.result);save();alert('Restore complete')}catch(e){alert('Invalid backup')}};r.readAsText(f)}
-function printReport(){
- const t=totals();let rows=db.members.map(m=>{let share=daysFor(m)*t.rate,paid=memberPaid(m),bal=paid-share;return `<tr><td>${esc(m.name)}</td><td>${daysFor(m)}</td><td>${eur(share)}</td><td>${eur(paid)}</td><td>${bal>=0?'Receive ':'Pay '} ${eur(Math.abs(bal))}</td></tr>`}).join('');
- let shops=db.shops.map(s=>{let d=db.shopTx.filter(x=>x.shopId===s.id&&x.type==='due').reduce((a,x)=>a+Number(x.amount||0),0),p=db.shopTx.filter(x=>x.shopId===s.id&&x.type==='payment').reduce((a,x)=>a+Number(x.amount||0),0);return `<tr><td>${esc(s.name)}</td><td>${eur(d)}</td><td>${eur(p)}</td><td>${eur(d-p)}</td></tr>`}).join('');
- let w=window.open('','_blank');w.document.write(`<html><head><title>Mess Hisab - ${esc(db.month)}</title><style>body{font-family:Arial;padding:20px;color:#222}table{width:100%;border-collapse:collapse;margin:15px 0}th,td{border:1px solid #ccc;padding:7px;text-align:left}h1{margin-bottom:4px}.muted{color:#666}</style><script>if("serviceWorker" in navigator){addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));}</script></head><body><h1>🏠 Mess Hisab</h1><div class="muted">${esc(db.month)} • Month days ${db.monthDays}</div><p><b>Total expense:</b> ${eur(t.expense)} &nbsp; <b>Person-days:</b> ${t.pd} &nbsp; <b>Daily rate:</b> ${eur(t.rate)}</p><h2>Members</h2><table><tr><th>Member</th><th>Days</th><th>Share</th><th>Contributed</th><th>Final</th></tr>${rows}</table><h2>Shops</h2><table><tr><th>Shop</th><th>Due</th><th>Paid</th><th>Balance</th></tr>${shops}</table><p class="muted">Generated from Mess Hisab • Offline data</p><script>window.onload=()=>window.print()<\/script></body></html>`);w.document.close()
+
+h2{margin:0 0 15px;font-size:20px}
+
+input,select,button{
+width:100%;
+padding:13px;
+margin:5px 0;
+border-radius:12px;
+border:1px solid #d8dbea;
+font-size:15px;
 }
-function render(){renderSummary();renderMembers();renderMarket();renderShops();renderBackup()}
+
+button{
+border:0;
+background:#5b4ee8;
+color:white;
+font-weight:bold;
+}
+
+button.green{background:#16a34a}
+button.red{background:#ef4444}
+button.gray{background:#e8e7ff;color:#4438b8}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:8px;
+}
+
+.stat{
+background:#f5f4ff;
+padding:14px;
+border-radius:15px;
+text-align:center;
+}
+.stat b{
+display:block;
+font-size:20px;
+margin-bottom:4px;
+}
+
+.member{
+display:flex;
+align-items:center;
+gap:8px;
+background:#f7f7ff;
+padding:10px;
+border-radius:13px;
+margin:8px 0;
+}
+.member-name{flex:1}
+.member-actions{
+display:flex;
+gap:5px;
+}
+.member-actions button{
+width:auto;
+padding:9px 12px;
+margin:0;
+}
+
+.balance{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:14px;
+border-radius:14px;
+margin:8px 0;
+}
+.get{background:#dcfce7;color:#166534}
+.pay{background:#fee2e2;color:#991b1b}
+
+.small{
+font-size:12px;
+color:#64748b;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+font-size:13px;
+}
+th,td{
+padding:9px 5px;
+border-bottom:1px solid #eee;
+text-align:left;
+}
+th{background:#f5f4ff}
+
+.hidden{display:none}
+
+.shop{
+padding:14px;
+background:#f7f7ff;
+border-radius:14px;
+margin:8px 0;
+}
+
+@media(max-width:500px){
+.grid{grid-template-columns:1fr}
+}
+
+@media print{
+nav,.no-print,header p{display:none!important}
+body{background:white}
+.card{box-shadow:none;border:1px solid #ddd}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>🏠 Mess Hisab</h1>
+<p>৩০ দিনের হিসাব • Offline • এই ফোনেই Data Save হবে</p>
+</header>
+
+<nav>
+<button class="active" onclick="showTab('summary',this)">📊 Summary</button>
+<button onclick="showTab('members',this)">👥 Members</button>
+<button onclick="showTab('market',this)">🛒 Market</button>
+<button onclick="showTab('cash',this)">💶 Cash</button>
+<button onclick="showTab('shops',this)">🏪 Shops</button>
+<button onclick="showTab('report',this)">📄 Report</button>
+</nav>
+
+<div class="container">
+
+<!-- SUMMARY -->
+<section id="summary">
+
+<div class="card">
+<h2>📅 হিসাবের সময়</h2>
+
+<label>শুরুর তারিখ</label>
+<input type="date" id="startDate" onchange="changeStart()">
+
+<label>শেষের তারিখ</label>
+<input type="text" id="endDate" readonly>
+
+<p class="small">শুরুর তারিখ থেকে ৩০ দিন হিসাব হবে।</p>
+</div>
+
+<div class="card">
+<h2>📊 Monthly Summary</h2>
+<div id="summaryBox"></div>
+</div>
+
+<div class="card">
+<h2>👥 কে দেবে / পাবে</h2>
+<div id="balanceBox"></div>
+</div>
+
+</section>
+
+<!-- MEMBERS -->
+<section id="members" class="hidden">
+
+<div class="card">
+<h2>👥 Members — সর্বোচ্চ ৭ জন</h2>
+
+<div class="grid">
+<input id="memberName" placeholder="সদস্যের নাম">
+<button onclick="addMember()">＋ Add Member</button>
+</div>
+<div id="memberList"></div>
+</div>
+
+</section>
+
+<!-- MARKET -->
+<section id="market" class="hidden">
+
+<div class="card">
+<h2>🛒 Market Expense</h2>
+
+<input type="date" id="marketDate">
+<select id="marketBy"></select>
+<input type="number" id="marketAmount" placeholder="কত €" step="0.01">
+<input id="marketNote" placeholder="যেমন: চাল, ডাল, সবজি">
+
+<button onclick="addMarket()">Market যোগ করুন</button>
+</div>
+
+<div class="card">
+<h2>📜 Market History</h2>
+<div id="marketHistory"></div>
+</div>
+
+</section>
+
+<!-- CASH -->
+<section id="cash" class="hidden">
+
+<div class="card">
+<h2>💶 Cash Deposit</h2>
+
+<input type="date" id="cashDate">
+<select id="cashBy"></select>
+<input type="number" id="cashAmount" placeholder="কত €" step="0.01">
+<input id="cashNote" placeholder="যেমন: মাসের জমা">
+
+<button onclick="addCash()">Cash জমা করুন</button>
+</div>
+
+<div class="card">
+<h2>📜 Cash History</h2>
+<div id="cashHistory"></div>
+</div>
+
+</section>
+
+<!-- SHOPS -->
+<section id="shops" class="hidden">
+
+<div class="card">
+<h2>🏪 দোকানের নাম</h2>
+
+<input id="shop1" placeholder="দোকান ১-এর নাম">
+<input id="shop2" placeholder="দোকান ২-এর নাম">
+<input id="shop3" placeholder="দোকান ৩-এর নাম">
+
+<button onclick="saveShops()">💾 দোকানের নাম Save</button>
+</div>
+
+<div class="card">
+<h2>🧾 দোকানের বাকি</h2>
+
+<select id="dueShop"></select>
+<input type="date" id="dueDate">
+<input type="number" id="dueAmount" placeholder="বাকি কত €" step="0.01">
+<input id="dueNote" placeholder="কী কেনা হয়েছে?">
+
+<button onclick="addDue()">বাকি যোগ করুন</button>
+</div>
+
+<div class="card">
+<h2>💳 দোকানের বাকি পরিশোধ</h2>
+
+<select id="paymentShop"></select>
+<input type="date" id="paymentDate">
+<select id="paymentBy"></select>
+<input type="number" id="paymentAmount" placeholder="কত €" step="0.01">
+
+<button onclick="addPayment()">পরিশোধ যোগ করুন</button>
+</div>
+
+<div class="card">
+<h2>🏪 দোকানের হিসাব</h2>
+<div id="shopSummary"></div>
+</div>
+
+</section>
+
+<!-- REPORT -->
+<section id="report" class="hidden">
+
+<div class="card">
+<h2>📄 Monthly Report</h2>
+
+<div id="reportContent"></div>
+
+<button class="green no-print" onclick="window.print()">
+📄 PDF / Print
+</button>
+</div>
+
+<div class="card no-print">
+<h2>💾 Backup</h2>
+
+<button onclick="backup()">Backup Save</button>
+
+<button class="gray" onclick="document.getElementById('restoreFile').click()">
+Restore Backup
+</button>
+
+<input type="file" id="restoreFile" accept=".json"
+style="display:none" onchange="restore(event)">
+
+<button class="red" onclick="clearAll()">সব হিসাব মুছুন</button>
+</div>
+
+</section>
+
+</div>
+
+<script>
+
+const KEY="MESS_HISAB_FINAL_V3";
+
+let data=JSON.parse(localStorage.getItem(KEY)||"null");
+
+if(!data){
+
+data={
+start:"",
+members:[],
+market:[],
+cash:[],
+dues:[],
+payments:[],
+shops:["দোকান ১","দোকান ২","দোকান ৩"]
+};
+
+}
+
+function save(){
+localStorage.setItem(KEY,JSON.stringify(data));
 render();
+}
+
+function money(n){
+return "€"+Number(n||0).toFixed(2);
+}
+
+function today(){
+return new Date().toISOString().slice(0,10);
+}
+
+function esc(x){
+return String(x||"")
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+}
+
+function showTab(id,btn){
+
+document.querySelectorAll("section").forEach(x=>{
+x.classList.add("hidden");
+});
+
+document.getElementById(id).classList.remove("hidden");
+
+document.querySelectorAll("nav button").forEach(x=>{
+x.classList.remove("active");
+});
+
+btn.classList.add("active");
+
+}
+
+function setDates(){
+
+if(!data.start){
+data.start=today();
+}
+
+document.getElementById("startDate").value=data.start;
+
+updateEnd();
+
+["marketDate","cashDate","dueDate","paymentDate"].forEach(id=>{
+if(!document.getElementById(id).value)
+document.getElementById(id).value=data.start;
+});
+
+}
+
+function updateEnd(){
+
+let s=data.start||today();
+
+let d=new Date(s+"T00:00:00");
+  d.setDate(d.getDate()+29);
+
+document.getElementById("endDate").value=
+d.toISOString().slice(0,10);
+
+}
+
+function changeStart(){
+
+data.start=document.getElementById("startDate").value;
+
+updateEnd();
+
+save();
+
+}
+
+function inPeriod(date){
+
+if(!date)return false;
+
+let s=data.start||today();
+
+let a=new Date(s+"T00:00:00");
+
+let b=new Date(s+"T00:00:00");
+
+b.setDate(b.getDate()+29);
+
+let d=new Date(date+"T00:00:00");
+
+return d>=a && d<=b;
+
+}
+
+/* MEMBERS */
+
+function addMember(){
+
+let name=document.getElementById("memberName").value.trim();
+
+if(!name)return alert("সদস্যের নাম লিখুন");
+
+if(data.members.length>=7)
+return alert("সর্বোচ্চ ৭ জন সদস্য রাখা যাবে");
+
+data.members.push({
+id:Date.now(),
+name:name,
+join:data.start||today(),
+leave:""
+});
+
+document.getElementById("memberName").value="";
+
+save();
+
+}
+
+function editMember(id){
+
+let m=data.members.find(x=>x.id===id);
+
+if(!m)return;
+
+let name=prompt("সদস্যের নাম:",m.name);
+
+if(name===null)return;
+
+name=name.trim();
+
+if(name)m.name=name;
+
+let join=prompt(
+"Join Date YYYY-MM-DD:",
+m.join||data.start
+);
+
+if(join!==null && join)m.join=join;
+
+let leave=prompt(
+"Leave Date YYYY-MM-DD (না থাকলে খালি রাখুন):",
+m.leave||""
+);
+
+if(leave!==null)m.leave=leave;
+
+save();
+
+}
+
+function removeMember(id){
+
+if(!confirm("এই সদস্য মুছে ফেলবেন?"))return;
+
+data.members=data.members.filter(x=>x.id!==id);
+
+save();
+
+}
+
+/* ACTIVE DAYS */
+
+function activeDays(m){
+
+let start=new Date((data.start||today())+"T00:00:00");
+
+let end=new Date((data.start||today())+"T00:00:00");
+
+end.setDate(end.getDate()+29);
+
+let join=m.join?
+new Date(m.join+"T00:00:00"):start;
+
+let leave=m.leave?
+new Date(m.leave+"T00:00:00"):end;
+
+let a=join>start?join:start;
+
+let b=leave<end?leave:end;
+
+if(b<a)return 0;
+
+return Math.floor((b-a)/86400000)+1;
+
+}
+
+/* SELECTS */
+
+function fillSelects(){
+
+let ids=["marketBy","cashBy","paymentBy"];
+
+ids.forEach(id=>{
+
+let s=document.getElementById(id);
+
+let old=s.value;
+
+s.innerHTML="<option value=''>সদস্য নির্বাচন</option>";
+
+data.members.forEach(m=>{
+
+let o=document.createElement("option");
+
+o.value=m.id;
+o.textContent=m.name;
+
+s.appendChild(o);
+
+});
+
+s.value=old;
+
+});
+
+let shopSelects=["dueShop","paymentShop"];
+
+shopSelects.forEach(id=>{
+
+let s=document.getElementById(id);
+
+let old=s.value;
+
+s.innerHTML="";
+
+data.shops.forEach((shop,i)=>{
+
+let o=document.createElement("option");
+
+o.value=i;
+o.textContent=shop;
+
+s.appendChild(o);
+
+});
+
+s.value=old;
+
+});
+
+}
+
+/* MARKET */
+
+function addMarket(){
+
+let by=Number(document.getElementById("marketBy").value);
+
+let amount=Number(document.getElementById("marketAmount").value);
+
+if(!by || amount<=0)
+return alert("সঠিক সদস্য ও টাকা দিন");
+
+data.market.push({
+id:Date.now(),
+date:document.getElementById("marketDate").value,
+by:by,
+amount:amount,
+note:document.getElementById("marketNote").value
+});
+
+document.getElementById("marketAmount").value="";
+document.getElementById("marketNote").value="";
+
+save();
+
+}
+
+/* CASH */
+
+function addCash(){
+
+let by=Number(document.getElementById("cashBy").value);
+
+let amount=Number(document.getElementById("cashAmount").value);
+
+if(!by || amount<=0)
+return alert("সঠিক সদস্য ও টাকা দিন");
+
+data.cash.push({
+id:Date.now(),
+date:document.getElementById("cashDate").value,
+by:by,
+amount:amount,
+note:document.getElementById("cashNote").value
+});
+
+document.getElementById("cashAmount").value="";
+document.getElementById("cashNote").value="";
+
+save();
+
+}
+
+/* SHOP DUE */
+
+function addDue(){
+
+let shop=Number(document.getElementById("dueShop").value);
+
+let amount=Number(document.getElementById("dueAmount").value);
+
+if(amount<=0)
+return alert("টাকার পরিমাণ দিন");
+
+data.dues.push({
+id:Date.now(),
+date:document.getElementById("dueDate").value,
+shop:shop,
+amount:amount,
+note:document.getElementById("dueNote").value
+});
+  document.getElementById("dueAmount").value="";
+document.getElementById("dueNote").value="";
+
+save();
+
+}
+
+/* SHOP PAYMENT */
+
+function addPayment(){
+
+let shop=Number(document.getElementById("paymentShop").value);
+
+let by=Number(document.getElementById("paymentBy").value);
+
+let amount=Number(document.getElementById("paymentAmount").value);
+
+if(!by || amount<=0)
+return alert("সঠিক সদস্য ও টাকা দিন");
+
+data.payments.push({
+id:Date.now(),
+date:document.getElementById("paymentDate").value,
+shop:shop,
+by:by,
+amount:amount
+});
+
+document.getElementById("paymentAmount").value="";
+
+save();
+
+}
+
+/* STATS */
+
+function stats(){
+
+let expense=0;
+let due=0;
+let cash=0;
+let payment=0;
+
+data.market.forEach(x=>{
+if(inPeriod(x.date))expense+=Number(x.amount);
+});
+
+data.dues.forEach(x=>{
+if(inPeriod(x.date))due+=Number(x.amount);
+});
+
+data.cash.forEach(x=>{
+if(inPeriod(x.date))cash+=Number(x.amount);
+});
+
+data.payments.forEach(x=>{
+if(inPeriod(x.date))payment+=Number(x.amount);
+});
+
+let totalExpense=expense+due;
+
+let totalDays=0;
+
+data.members.forEach(m=>{
+totalDays+=activeDays(m);
+});
+
+let rate=totalDays?totalExpense/totalDays:0;
+
+let members=data.members.map(m=>{
+
+let market=0;
+let cashPaid=0;
+let shopPaid=0;
+
+data.market.forEach(x=>{
+if(x.by===m.id && inPeriod(x.date))
+market+=Number(x.amount);
+});
+
+data.cash.forEach(x=>{
+if(x.by===m.id && inPeriod(x.date))
+cashPaid+=Number(x.amount);
+});
+
+data.payments.forEach(x=>{
+if(x.by===m.id && inPeriod(x.date))
+shopPaid+=Number(x.amount);
+});
+
+let paid=market+cashPaid+shopPaid;
+
+let share=activeDays(m)*rate;
+
+let balance=paid-share;
+
+return {
+member:m,
+days:activeDays(m),
+share:share,
+market:market,
+cash:cashPaid,
+shopPaid:shopPaid,
+paid:paid,
+balance:balance
+};
+
+});
+
+return {
+expense:expense,
+due:due,
+cash:cash,
+payment:payment,
+totalExpense:totalExpense,
+totalDays:totalDays,
+rate:rate,
+members:members
+};
+
+}
+
+/* RENDER */
+
+function render(){
+
+setDates();
+fillSelects();
+renderMembers();
+renderSummary();
+renderMarket();
+renderCash();
+renderShops();
+renderReport();
+
+}
+
+function renderMembers(){
+
+let box=document.getElementById("memberList");
+
+if(!data.members.length){
+
+box.innerHTML="<p>কোনো সদস্য নেই।</p>";
+
+return;
+
+}
+
+box.innerHTML=data.members.map(m=>`
+
+<div class="member">
+
+<div class="member-name">
+
+<b>${esc(m.name)}</b>
+
+<div class="small">
+${activeDays(m)} Day
+<br>
+Join: ${esc(m.join||"-")}
+${m.leave?" • Leave: "+esc(m.leave):""}
+</div>
+
+</div>
+
+<div class="member-actions">
+
+<button class="gray"
+onclick="editMember(${m.id})">✏️</button>
+
+<button class="red"
+onclick="removeMember(${m.id})">×</button>
+
+</div>
+
+</div>
+
+`).join("");
+
+}
+
+function renderSummary(){
+
+let s=stats();
+
+document.getElementById("summaryBox").innerHTML=`
+
+<div class="grid">
+
+<div class="stat">
+<b>${money(s.totalExpense)}</b>
+মোট খাবার খরচ
+</div>
+
+<div class="stat">
+<b>${money(s.rate)}</b>
+প্রতি Day
+</div>
+
+<div class="stat">
+<b>${s.totalDays}</b>
+মোট Person-Day
+</div>
+
+<div class="stat">
+<b>${money(s.cash)}</b>
+Cash জমা
+</div>
+
+</div>
+
+<br>
+
+<table>
+
+<tr>
+<th>বিষয়</th>
+<th>পরিমাণ</th>
+</tr>
+
+<tr>
+<td>🛒 Market</td>
+<td>${money(s.expense)}</td>
+</tr>
+
+<tr>
+<td>🏪 দোকানের বাকি</td>
+<td>${money(s.due)}</td>
+</tr>
+
+<tr>
+<td>💶 Cash Deposit</td>
+<td>${money(s.cash)}</td>
+</tr>
+
+<tr>
+<td>💳 দোকান Payment</td>
+<td>${money(s.payment)}</td>
+</tr>
+
+</table>
+
+`;
+
+document.getElementById("balanceBox").innerHTML=
+s.members.length?
+
+s.members.map(x=>`
+
+<div class="balance ${x.balance>=0?"get":"pay"}">
+
+<div>
+
+<b>${esc(x.member.name)}</b>
+
+<div class="small">
+
+${x.days} Day • অংশ ${money(x.share)}
+
+<br>
+
+Market ${money(x.market)}
++
+Cash ${money(x.cash)}
++
+Shop ${money(x.shopPaid)}
+
+</div>
+
+</div>
+
+<strong>
+
+${x.balance>=0?"পাবে ":"দেবে "}
+
+${money(Math.abs(x.balance))}
+
+</strong>
+
+</div>
+
+`).join("")
+
+:"কোনো সদস্য নেই।";
+
+}
+
+function renderMarket(){
+  let rows=data.market.filter(x=>inPeriod(x.date));
+
+document.getElementById("marketHistory").innerHTML=
+
+rows.length?
+
+`<table>
+<tr>
+<th>তারিখ</th>
+<th>নাম</th>
+<th>টাকা</th>
+</tr>
+
+${rows.map(x=>{
+
+let m=data.members.find(a=>a.id===x.by);
+
+return `
+<tr>
+<td>${x.date}</td>
+<td>${esc(m?m.name:"-")}</td>
+<td>${money(x.amount)}</td>
+</tr>
+`;
+
+}).join("")}
+
+</table>`
+
+:"কোনো Market খরচ নেই।";
+
+}
+
+function renderCash(){
+
+let rows=data.cash.filter(x=>inPeriod(x.date));
+
+document.getElementById("cashHistory").innerHTML=
+
+rows.length?
+
+`<table>
+<tr>
+<th>তারিখ</th>
+<th>নাম</th>
+<th>টাকা</th>
+</tr>
+
+${rows.map(x=>{
+
+let m=data.members.find(a=>a.id===x.by);
+
+return `
+<tr>
+<td>${x.date}</td>
+<td>${esc(m?m.name:"-")}</td>
+<td>${money(x.amount)}</td>
+</tr>
+`;
+
+}).join("")}
+
+</table>`
+
+:"কোনো Cash জমা নেই।";
+
+}
+
+function renderShops(){
+
+let box=document.getElementById("shopSummary");
+
+box.innerHTML=data.shops.map((shop,i)=>{
+
+let due=0;
+let paid=0;
+
+data.dues.forEach(x=>{
+if(x.shop===i && inPeriod(x.date))
+due+=Number(x.amount);
+});
+
+data.payments.forEach(x=>{
+if(x.shop===i && inPeriod(x.date))
+paid+=Number(x.amount);
+});
+
+return `
+
+<div class="shop">
+
+<b>🏪 ${esc(shop)}</b>
+
+<br>
+
+<span class="small">
+বাকি: ${money(due)}
+&nbsp; | &nbsp;
+পরিশোধ: ${money(paid)}
+</span>
+
+<br><br>
+
+<strong>
+বর্তমান বাকি: ${money(due-paid)}
+</strong>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+function saveShops(){
+
+let a=document.getElementById("shop1").value.trim();
+let b=document.getElementById("shop2").value.trim();
+let c=document.getElementById("shop3").value.trim();
+
+if(a)data.shops[0]=a;
+if(b)data.shops[1]=b;
+if(c)data.shops[2]=c;
+
+save();
+
+alert("দোকানের নাম Save হয়েছে ✅");
+
+}
+
+function renderReport(){
+
+let s=stats();
+
+let start=data.start;
+let end=document.getElementById("endDate").value;
+
+document.getElementById("reportContent").innerHTML=`
+
+<h3>🏠 Mess Hisab</h3>
+
+<p>
+<b>সময়:</b> ${start} → ${end}
+</p>
+
+<p>
+<b>মোট খাবার খরচ:</b> ${money(s.totalExpense)}
+</p>
+
+<p>
+<b>মোট Person-Day:</b> ${s.totalDays}
+</p>
+
+<p>
+<b>প্রতি Day:</b> ${money(s.rate)}
+</p>
+
+<table>
+
+<tr>
+<th>Member</th>
+<th>Day</th>
+<th>অংশ</th>
+<th>দিয়েছে</th>
+<th>Final</th>
+</tr>
+
+${s.members.map(x=>`
+
+<tr>
+
+<td>${esc(x.member.name)}</td>
+
+<td>${x.days}</td>
+
+<td>${money(x.share)}</td>
+
+<td>${money(x.paid)}</td>
+
+<td>
+
+<b>
+${x.balance>=0?"পাবে ":"দেবে "}
+${money(Math.abs(x.balance))}
+</b>
+
+</td>
+
+</tr>
+
+`).join("")}
+
+</table>
+
+<br>
+
+<h3>🏪 Shops</h3>
+
+<table>
+
+<tr>
+<th>Shop</th>
+<th>Due</th>
+<th>Paid</th>
+<th>Balance</th>
+</tr>
+
+${data.shops.map((shop,i)=>{
+
+let due=0;
+let paid=0;
+
+data.dues.forEach(x=>{
+if(x.shop===i && inPeriod(x.date))
+due+=Number(x.amount);
+});
+
+data.payments.forEach(x=>{
+if(x.shop===i && inPeriod(x.date))
+paid+=Number(x.amount);
+});
+
+return `
+
+<tr>
+<td>${esc(shop)}</td>
+<td>${money(due)}</td>
+<td>${money(paid)}</td>
+<td>${money(due-paid)}</td>
+</tr>
+
+`;
+
+}).join("")}
+
+</table>
+
+`;
+
+}
+
+/* BACKUP */
+
+function backup(){
+
+let blob=new Blob(
+[JSON.stringify(data,null,2)],
+{type:"application/json"}
+);
+
+let url=URL.createObjectURL(blob);
+
+let a=document.createElement("a");
+
+a.href=url;
+a.download="mess-hisab-backup.json";
+
+a.click();
+
+URL.revokeObjectURL(url);
+
+}
+
+function restore(event){
+
+let file=event.target.files[0];
+
+if(!file)return;
+
+let reader=new FileReader();
+
+reader.onload=function(){
+
+try{
+
+let x=JSON.parse(reader.result);
+
+if(
+!x.members ||
+!x.market ||
+!x.cash ||
+!x.dues ||
+!x.payments
+)throw Error();
+
+data=x;
+
+save();
+
+alert("Backup Restore হয়েছে ✅");
+
+}catch(e){
+
+alert("Backup file সঠিক নয়।");
+
+}
+
+};
+
+reader.readAsText(file);
+
+}
+
+function clearAll(){
+
+if(!confirm("সব হিসাব মুছে ফেলবেন?"))return;
+
+if(!confirm("শেষবার নিশ্চিত করুন। সব Data মুছে যাবে!"))return;
+
+data={
+start:today(),
+members:[],
+market:[],
+cash:[],
+dues:[],
+payments:[],
+shops:["দোকান ১","দোকান ২","দোকান ৩"]
+};
+  save();
+
+}
+
+/* START */
+
+if(!data.start)
+data.start=today();
+
+if(!data.shops || data.shops.length!==3)
+data.shops=["দোকান ১","দোকান ২","দোকান ৩"];
+
+setDates();
+render();
+
 </script>
+
 </body>
 </html>
