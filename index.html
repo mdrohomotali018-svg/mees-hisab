@@ -970,36 +970,48 @@ ${money(Math.abs(x.balance))}
 }
 
 function renderMarket(){
+
   let rows=data.market.filter(x=>inPeriod(x.date));
 
-document.getElementById("marketHistory").innerHTML=
+  document.getElementById("marketHistory").innerHTML=
 
-rows.length?
+  rows.length?
 
-`<table>
-<tr>
-<th>তারিখ</th>
-<th>নাম</th>
-<th>টাকা</th>
-</tr>
+  `<table>
+  <tr>
+  <th>তারিখ</th>
+  <th>নাম</th>
+  <th>টাকা</th>
+  <th>Action</th>
+  </tr>
 
-${rows.map(x=>{
+  ${rows.map(x=>{
 
-let m=data.members.find(a=>a.id===x.by);
+    let m=data.members.find(a=>a.id===x.by);
 
-return `
-<tr>
-<td>${x.date}</td>
-<td>${esc(m?m.name:"-")}</td>
-<td>${money(x.amount)}</td>
-</tr>
-`;
+    return `
+    <tr>
+      <td>${esc(x.date)}</td>
+      <td>${esc(m?m.name:"-")}</td>
+      <td>${money(x.amount)}</td>
+      <td>
+        <button
+          style="padding:7px;margin:2px"
+          onclick="editMarket(${x.id})">✏️</button>
 
-}).join("")}
+        <button
+          class="red"
+          style="padding:7px;margin:2px"
+          onclick="deleteMarket(${x.id})">🗑️</button>
+      </td>
+    </tr>
+    `;
 
-</table>`
+  }).join("")}
 
-:"কোনো Market খরচ নেই।";
+  </table>`
+
+  :"কোনো Market খরচ নেই।";
 
 }
 
