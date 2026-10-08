@@ -252,7 +252,63 @@ body{background:white}
 </div>
 
 </section>
+/* EDIT / DELETE MARKET */
 
+function editMarket(id){
+
+  let item=data.market.find(x=>x.id===id);
+
+  if(!item)return;
+
+  let amount=prompt(
+    "নতুন টাকার পরিমাণ লিখুন (€):",
+    Number(item.amount).toFixed(2)
+  );
+
+  if(amount===null)return;
+
+  amount=amount.trim();
+
+  if(amount==="" || !Number.isFinite(Number(amount)) || Number(amount)<=0){
+
+    alert("সঠিক টাকার পরিমাণ লিখুন।");
+
+    return;
+  }
+
+  let newAmount=Number(amount);
+
+  if(!confirm(
+    "টাকা পরিবর্তন করবেন?\n"+
+    money(item.amount)+" → "+money(newAmount)
+  ))return;
+
+  item.amount=newAmount;
+
+  save();
+
+  alert("Market হিসাব পরিবর্তন হয়েছে ✅");
+
+}
+
+function deleteMarket(id){
+
+  let item=data.market.find(x=>x.id===id);
+
+  if(!item)return;
+
+  if(!confirm(
+    "এই Market হিসাবটি মুছে ফেলবেন?\n"+
+    money(item.amount)
+  ))return;
+
+  data.market=data.market.filter(x=>x.id!==id);
+
+  save();
+
+  alert("Market হিসাব মুছে ফেলা হয়েছে।");
+
+}
 <!-- CASH -->
 <section id="cash" class="hidden">
 
