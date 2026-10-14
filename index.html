@@ -5,175 +5,44 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#5b4ee8">
 <title>🏠 Mess Hisab</title>
-
 <style>
 *{box-sizing:border-box}
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#f3f4ff;
-color:#18223b;
-}
-header{
-background:linear-gradient(135deg,#5146e5,#8b5cf6);
-color:white;
-padding:22px 16px;
-border-radius:0 0 25px 25px;
-}
+body{margin:0;font-family:Arial,sans-serif;background:#f3f4ff;color:#18223b}
+header{background:linear-gradient(135deg,#5146e5,#8b5cf6);color:white;padding:22px 16px;border-radius:0 0 25px 25px}
 header h1{margin:0;font-size:28px}
 header p{margin:7px 0 0;opacity:.9}
-
-nav{
-display:flex;
-gap:8px;
-overflow-x:auto;
-padding:12px;
-background:#f3f4ff;
-position:sticky;
-top:0;
-z-index:10;
-}
-nav button{
-white-space:nowrap;
-width:auto;
-margin:0;
-border:0;
-background:white;
-color:#334155;
-padding:12px 18px;
-border-radius:25px;
-font-weight:bold;
-}
-nav button.active{
-background:#5b4ee8;
-color:white;
-}
-
-.container{
-max-width:750px;
-margin:auto;
-padding:12px;
-}
-
-.card{
-background:white;
-border-radius:20px;
-padding:17px;
-margin:14px 0;
-box-shadow:0 4px 18px #00000010;
-}
-
+nav{display:flex;gap:8px;overflow-x:auto;padding:12px;background:#f3f4ff;position:sticky;top:0;z-index:10}
+nav button{white-space:nowrap;width:auto;margin:0;border:0;background:white;color:#334155;padding:12px 18px;border-radius:25px;font-weight:bold}
+nav button.active{background:#5b4ee8;color:white}
+.container{max-width:750px;margin:auto;padding:12px}
+.card{background:white;border-radius:20px;padding:17px;margin:14px 0;box-shadow:0 4px 18px #00000010}
 h2{margin:0 0 15px;font-size:20px}
-
-input,select,button{
-width:100%;
-padding:13px;
-margin:5px 0;
-border-radius:12px;
-border:1px solid #d8dbea;
-font-size:15px;
-}
-
-button{
-border:0;
-background:#5b4ee8;
-color:white;
-font-weight:bold;
-}
-
+input,select,button{width:100%;padding:13px;margin:5px 0;border-radius:12px;border:1px solid #d8dbea;font-size:15px}
+button{border:0;background:#5b4ee8;color:white;font-weight:bold}
 button.green{background:#16a34a}
 button.red{background:#ef4444}
 button.gray{background:#e8e7ff;color:#4438b8}
-
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:8px;
-}
-
-.stat{
-background:#f5f4ff;
-padding:14px;
-border-radius:15px;
-text-align:center;
-}
-.stat b{
-display:block;
-font-size:20px;
-margin-bottom:4px;
-}
-
-.member{
-display:flex;
-align-items:center;
-gap:8px;
-background:#f7f7ff;
-padding:10px;
-border-radius:13px;
-margin:8px 0;
-}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat{background:#f5f4ff;padding:14px;border-radius:15px;text-align:center}
+.stat b{display:block;font-size:20px;margin-bottom:4px}
+.member{display:flex;align-items:center;gap:8px;background:#f7f7ff;padding:10px;border-radius:13px;margin:8px 0}
 .member-name{flex:1}
-.member-actions{
-display:flex;
-gap:5px;
-}
-.member-actions button{
-width:auto;
-padding:9px 12px;
-margin:0;
-}
-
-.balance{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:14px;
-border-radius:14px;
-margin:8px 0;
-}
+.member-actions{display:flex;gap:5px}
+.member-actions button{width:auto;padding:9px 12px;margin:0}
+.balance{display:flex;justify-content:space-between;align-items:center;padding:14px;border-radius:14px;margin:8px 0}
 .get{background:#dcfce7;color:#166534}
 .pay{background:#fee2e2;color:#991b1b}
-
-.small{
-font-size:12px;
-color:#64748b;
-}
-
-table{
-width:100%;
-border-collapse:collapse;
-font-size:13px;
-}
-th,td{
-padding:9px 5px;
-border-bottom:1px solid #eee;
-text-align:left;
-}
+.small{font-size:12px;color:#64748b}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:9px 5px;border-bottom:1px solid #eee;text-align:left}
 th{background:#f5f4ff}
-
 .hidden{display:none}
-
-.shop{
-padding:14px;
-background:#f7f7ff;
-border-radius:14px;
-margin:8px 0;
-}
-
-@media(max-width:500px){
-.grid{grid-template-columns:1fr}
-}
-
-@media print{
-nav,.no-print,header p{display:none!important}
-body{background:white}
-.card{box-shadow:none;border:1px solid #ddd}
-}
+.shop{padding:14px;background:#f7f7ff;border-radius:14px;margin:8px 0}
+@media(max-width:500px){.grid{grid-template-columns:1fr}}
+@media print{nav,.no-print,header p{display:none!important}body{background:white}.card{box-shadow:none;border:1px solid #ddd}}
 </style>
 </head>
-
 <body>
-
 <header>
 <h1>🏠 Mess Hisab</h1>
 <p>৩০ দিনের হিসাব • Offline • এই ফোনেই Data Save হবে</p>
@@ -183,1199 +52,477 @@ body{background:white}
 <button class="active" onclick="showTab('summary',this)">📊 Summary</button>
 <button onclick="showTab('members',this)">👥 Members</button>
 <button onclick="showTab('market',this)">🛒 Market</button>
+<button onclick="showTab('guest',this)">🍽️ Guest Meal</button>
 <button onclick="showTab('cash',this)">💶 Cash</button>
 <button onclick="showTab('shops',this)">🏪 Shops</button>
 <button onclick="showTab('report',this)">📄 Report</button>
 </nav>
 
 <div class="container">
-
-<!-- SUMMARY -->
 <section id="summary">
-
 <div class="card">
 <h2>📅 হিসাবের সময়</h2>
-
 <label>শুরুর তারিখ</label>
 <input type="date" id="startDate" onchange="changeStart()">
-
 <label>শেষের তারিখ</label>
 <input type="text" id="endDate" readonly>
-
 <p class="small">শুরুর তারিখ থেকে ৩০ দিন হিসাব হবে।</p>
 </div>
-
-<div class="card">
-<h2>📊 Monthly Summary</h2>
-<div id="summaryBox"></div>
-</div>
-
-<div class="card">
-<h2>👥 কে দেবে / পাবে</h2>
-<div id="balanceBox"></div>
-</div>
-
+<div class="card"><h2>📊 Monthly Summary</h2><div id="summaryBox"></div></div>
+<div class="card"><h2>👥 কে দেবে / পাবে</h2><div id="balanceBox"></div></div>
 </section>
 
-<!-- MEMBERS -->
 <section id="members" class="hidden">
-
 <div class="card">
 <h2>👥 Members — সর্বোচ্চ ৭ জন</h2>
-
-<div class="grid">
-<input id="memberName" placeholder="সদস্যের নাম">
-<button onclick="addMember()">＋ Add Member</button>
-</div>
+<div class="grid"><input id="memberName" placeholder="সদস্যের নাম"><button onclick="addMember()">＋ Add Member</button></div>
 <div id="memberList"></div>
 </div>
-
 </section>
 
-<!-- MARKET -->
 <section id="market" class="hidden">
-
 <div class="card">
 <h2>🛒 Market Expense</h2>
-
 <input type="date" id="marketDate">
 <select id="marketBy"></select>
 <input type="number" id="marketAmount" placeholder="কত €" step="0.01">
 <input id="marketNote" placeholder="যেমন: চাল, ডাল, সবজি">
-
 <button onclick="addMarket()">Market যোগ করুন</button>
 </div>
-
-<div class="card">
-<h2>📜 Market History</h2>
-<div id="marketHistory"></div>
-</div>
-
+<div class="card"><h2>📜 Market History</h2><div id="marketHistory"></div></div>
 </section>
-<script>
-/* EDIT / DELETE MARKET */
 
-function editMarket(id){
+<section id="guest" class="hidden">
+<div class="card">
+<h2>🍽️ Guest Meal — অতিথির খাবার</h2>
+<label>অতিথির নাম</label>
+<input id="guestName" placeholder="অতিথির নাম লিখুন">
+<label>খাওয়ার তারিখ</label>
+<input type="date" id="guestDate">
+<label>খাবারের দাম (€)</label>
+<input type="number" id="guestAmount" placeholder="যেমন: 10" min="0.01" step="0.01">
+<p class="small">অতিথি খাওয়ার দিনই টাকা দিয়ে দিলে আয় হিসেবে জমা হবে।</p>
+<button onclick="addGuestMeal()">＋ Guest Meal যোগ করুন</button>
+</div>
+<div class="card"><h2>📊 Guest Meal Summary</h2><div id="guestSummary"></div></div>
+<div class="card"><h2>📜 Guest Meal History</h2><div id="guestHistory"></div></div>
+</section>
 
-  let item=data.market.find(x=>x.id===id);
-
-  if(!item)return;
-
-  let amount=prompt(
-    "নতুন টাকার পরিমাণ লিখুন (€):",
-    Number(item.amount).toFixed(2)
-  );
-
-  if(amount===null)return;
-
-  amount=amount.trim();
-
-  if(amount==="" || !Number.isFinite(Number(amount)) || Number(amount)<=0){
-
-    alert("সঠিক টাকার পরিমাণ লিখুন।");
-
-    return;
-  }
-
-  let newAmount=Number(amount);
-
-  if(!confirm(
-    "টাকা পরিবর্তন করবেন?\n"+
-    money(item.amount)+" → "+money(newAmount)
-  ))return;
-
-  item.amount=newAmount;
-
-  save();
-
-  alert("Market হিসাব পরিবর্তন হয়েছে ✅");
-
-}
-
-function deleteMarket(id){
-
-  let item=data.market.find(x=>x.id===id);
-
-  if(!item)return;
-
-  if(!confirm(
-    "এই Market হিসাবটি মুছে ফেলবেন?\n"+
-    money(item.amount)
-  ))return;
-
-  data.market=data.market.filter(x=>x.id!==id);
-
-  save();
-
-  alert("Market হিসাব মুছে ফেলা হয়েছে।");
-
-}
-</script>
-
-<!-- CASH -->
 <section id="cash" class="hidden">
-
 <div class="card">
 <h2>💶 Cash Deposit</h2>
-
 <input type="date" id="cashDate">
 <select id="cashBy"></select>
 <input type="number" id="cashAmount" placeholder="কত €" step="0.01">
 <input id="cashNote" placeholder="যেমন: মাসের জমা">
-
 <button onclick="addCash()">Cash জমা করুন</button>
 </div>
-
-<div class="card">
-<h2>📜 Cash History</h2>
-<div id="cashHistory"></div>
-</div>
-
+<div class="card"><h2>📜 Cash History</h2><div id="cashHistory"></div></div>
 </section>
 
-<!-- SHOPS -->
 <section id="shops" class="hidden">
-
 <div class="card">
 <h2>🏪 দোকানের নাম</h2>
-
 <input id="shop1" placeholder="দোকান ১-এর নাম">
 <input id="shop2" placeholder="দোকান ২-এর নাম">
 <input id="shop3" placeholder="দোকান ৩-এর নাম">
-
 <button onclick="saveShops()">💾 দোকানের নাম Save</button>
 </div>
-
 <div class="card">
 <h2>🧾 দোকানের বাকি</h2>
-
 <select id="dueShop"></select>
 <input type="date" id="dueDate">
 <input type="number" id="dueAmount" placeholder="বাকি কত €" step="0.01">
 <input id="dueNote" placeholder="কী কেনা হয়েছে?">
-
 <button onclick="addDue()">বাকি যোগ করুন</button>
 </div>
-
 <div class="card">
 <h2>💳 দোকানের বাকি পরিশোধ</h2>
-
 <select id="paymentShop"></select>
 <input type="date" id="paymentDate">
 <select id="paymentBy"></select>
 <input type="number" id="paymentAmount" placeholder="কত €" step="0.01">
-
 <button onclick="addPayment()">পরিশোধ যোগ করুন</button>
 </div>
-
-<div class="card">
-<h2>🏪 দোকানের হিসাব</h2>
-<div id="shopSummary"></div>
-</div>
-
+<div class="card"><h2>🏪 দোকানের হিসাব</h2><div id="shopSummary"></div></div>
 </section>
 
-<!-- REPORT -->
 <section id="report" class="hidden">
-
 <div class="card">
 <h2>📄 Monthly Report</h2>
-
 <div id="reportContent"></div>
-
-<button class="green no-print" onclick="window.print()">
-📄 PDF / Print
-</button>
+<button class="green no-print" onclick="window.print()">📄 PDF / Print</button>
 </div>
-
 <div class="card no-print">
 <h2>💾 Backup</h2>
-
 <button onclick="backup()">Backup Save</button>
-
-<button class="gray" onclick="document.getElementById('restoreFile').click()">
-Restore Backup
-</button>
-
-<input type="file" id="restoreFile" accept=".json"
-style="display:none" onchange="restore(event)">
-
+<button class="gray" onclick="document.getElementById('restoreFile').click()">Restore Backup</button>
+<input type="file" id="restoreFile" accept=".json" style="display:none" onchange="restore(event)">
 <button class="red" onclick="clearAll()">সব হিসাব মুছুন</button>
 </div>
-
 </section>
-
 </div>
 
 <script>
-
 const KEY="MESS_HISAB_FINAL_V3";
-
 let data=JSON.parse(localStorage.getItem(KEY)||"null");
-
 if(!data){
-
-data={
-start:"",
-members:[],
-market:[],
-cash:[],
-dues:[],
-payments:[],
-shops:["দোকান ১","দোকান ২","দোকান ৩"]
-};
-
+data={start:"",members:[],market:[],cash:[],dues:[],payments:[],guestMeals:[],shops:["দোকান ১","দোকান ২","দোকান ৩"]};
 }
+if(!Array.isArray(data.guestMeals))data.guestMeals=[];
 
-function save(){
-localStorage.setItem(KEY,JSON.stringify(data));
-render();
-}
-
-function money(n){
-return "€"+Number(n||0).toFixed(2);
-}
-
-function today(){
-return new Date().toISOString().slice(0,10);
-}
-
-function esc(x){
-return String(x||"")
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
-}
+function save(){localStorage.setItem(KEY,JSON.stringify(data));render();}
+function money(n){return "€"+Number(n||0).toFixed(2);}
+function today(){return new Date().toISOString().slice(0,10);}
+function esc(x){return String(x||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");}
 
 function showTab(id,btn){
-
-document.querySelectorAll("section").forEach(x=>{
-x.classList.add("hidden");
-});
-
+document.querySelectorAll("section").forEach(x=>x.classList.add("hidden"));
 document.getElementById(id).classList.remove("hidden");
-
-document.querySelectorAll("nav button").forEach(x=>{
-x.classList.remove("active");
-});
-
+document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
 btn.classList.add("active");
-
 }
 
 function setDates(){
-
-if(!data.start){
-data.start=today();
-}
-
+if(!data.start)data.start=today();
 document.getElementById("startDate").value=data.start;
-
 updateEnd();
-
-["marketDate","cashDate","dueDate","paymentDate"].forEach(id=>{
-if(!document.getElementById(id).value)
-document.getElementById(id).value=data.start;
+["marketDate","cashDate","dueDate","paymentDate","guestDate"].forEach(id=>{
+if(!document.getElementById(id).value)document.getElementById(id).value=data.start;
 });
-
 }
-
 function updateEnd(){
-
-let s=data.start||today();
-
-let d=new Date(s+"T00:00:00");
-  d.setDate(d.getDate()+29);
-
-document.getElementById("endDate").value=
-d.toISOString().slice(0,10);
-
+let s=data.start||today();let d=new Date(s+"T00:00:00");d.setDate(d.getDate()+29);
+document.getElementById("endDate").value=d.toISOString().slice(0,10);
 }
-
-function changeStart(){
-
-data.start=document.getElementById("startDate").value;
-
-updateEnd();
-
-save();
-
-}
-
+function changeStart(){data.start=document.getElementById("startDate").value;updateEnd();save();}
 function inPeriod(date){
-
-if(!date)return false;
-
-let s=data.start||today();
-
-let a=new Date(s+"T00:00:00");
-
-let b=new Date(s+"T00:00:00");
-
-b.setDate(b.getDate()+29);
-
-let d=new Date(date+"T00:00:00");
-
-return d>=a && d<=b;
-
+if(!date)return false;let s=data.start||today();let a=new Date(s+"T00:00:00");let b=new Date(s+"T00:00:00");b.setDate(b.getDate()+29);
+let d=new Date(date+"T00:00:00");return d>=a&&d<=b;
 }
 
 /* MEMBERS */
-
 function addMember(){
-
 let name=document.getElementById("memberName").value.trim();
-
 if(!name)return alert("সদস্যের নাম লিখুন");
-
-if(data.members.length>=7)
-return alert("সর্বোচ্চ ৭ জন সদস্য রাখা যাবে");
-
-data.members.push({
-id:Date.now(),
-name:name,
-join:data.start||today(),
-leave:""
-});
-
-document.getElementById("memberName").value="";
-
-save();
-
+if(data.members.length>=7)return alert("সর্বোচ্চ ৭ জন সদস্য রাখা যাবে");
+data.members.push({id:Date.now(),name:name,join:data.start||today(),leave:""});
+document.getElementById("memberName").value="";save();
 }
-
 function editMember(id){
-
-let m=data.members.find(x=>x.id===id);
-
-if(!m)return;
-
-let name=prompt("সদস্যের নাম:",m.name);
-
-if(name===null)return;
-
-name=name.trim();
-
-if(name)m.name=name;
-
-let join=prompt(
-"Join Date YYYY-MM-DD:",
-m.join||data.start
-);
-
-if(join!==null && join)m.join=join;
-
-let leave=prompt(
-"Leave Date YYYY-MM-DD (না থাকলে খালি রাখুন):",
-m.leave||""
-);
-
-if(leave!==null)m.leave=leave;
-
+let m=data.members.find(x=>x.id===id);if(!m)return;
+let name=prompt("সদস্যের নাম:",m.name);if(name===null)return;name=name.trim();if(name)m.name=name;
+let join=prompt("Join Date YYYY-MM-DD:",m.join||data.start);if(join!==null&&join)m.join=join;
+let leave=prompt("Leave Date YYYY-MM-DD (না থাকলে খালি রাখুন):",m.leave||"");if(leave!==null)m.leave=leave;
 save();
-
 }
-
-function removeMember(id){
-
-if(!confirm("এই সদস্য মুছে ফেলবেন?"))return;
-
-data.members=data.members.filter(x=>x.id!==id);
-
-save();
-
-}
+function removeMember(id){if(!confirm("এই সদস্য মুছে ফেলবেন?"))return;data.members=data.members.filter(x=>x.id!==id);save();}
 
 /* ACTIVE DAYS */
-
 function activeDays(m){
-
-let start=new Date((data.start||today())+"T00:00:00");
-
-let end=new Date((data.start||today())+"T00:00:00");
-
-end.setDate(end.getDate()+29);
-
-let join=m.join?
-new Date(m.join+"T00:00:00"):start;
-
-let leave=m.leave?
-new Date(m.leave+"T00:00:00"):end;
-
-let a=join>start?join:start;
-
-let b=leave<end?leave:end;
-
-if(b<a)return 0;
-
-return Math.floor((b-a)/86400000)+1;
-
+let start=new Date((data.start||today())+"T00:00:00");let end=new Date((data.start||today())+"T00:00:00");end.setDate(end.getDate()+29);
+let join=m.join?new Date(m.join+"T00:00:00"):start;let leave=m.leave?new Date(m.leave+"T00:00:00"):end;
+let a=join>start?join:start;let b=leave<end?leave:end;if(b<a)return 0;return Math.floor((b-a)/86400000)+1;
 }
 
 /* SELECTS */
-
 function fillSelects(){
-
-let ids=["marketBy","cashBy","paymentBy"];
-
-ids.forEach(id=>{
-
-let s=document.getElementById(id);
-
-let old=s.value;
-
-s.innerHTML="<option value=''>সদস্য নির্বাচন</option>";
-
-data.members.forEach(m=>{
-
-let o=document.createElement("option");
-
-o.value=m.id;
-o.textContent=m.name;
-
-s.appendChild(o);
-
+["marketBy","cashBy","paymentBy"].forEach(id=>{
+let s=document.getElementById(id);let old=s.value;s.innerHTML="<option value=''>সদস্য নির্বাচন</option>";
+data.members.forEach(m=>{let o=document.createElement("option");o.value=m.id;o.textContent=m.name;s.appendChild(o);});
+if([...s.options].some(o=>o.value===old))s.value=old;
 });
-
-s.value=old;
-
+["dueShop","paymentShop"].forEach(id=>{
+let s=document.getElementById(id);let old=s.value;s.innerHTML="";
+data.shops.forEach((name,i)=>{let o=document.createElement("option");o.value=i;o.textContent=name;s.appendChild(o);});
+if([...s.options].some(o=>o.value===old))s.value=old;
 });
-
-let shopSelects=["dueShop","paymentShop"];
-
-shopSelects.forEach(id=>{
-
-let s=document.getElementById(id);
-
-let old=s.value;
-
-s.innerHTML="";
-
-data.shops.forEach((shop,i)=>{
-
-let o=document.createElement("option");
-
-o.value=i;
-o.textContent=shop;
-
-s.appendChild(o);
-
-});
-
-s.value=old;
-
-});
-
+["shop1","shop2","shop3"].forEach((id,i)=>{let el=document.getElementById(id);if(document.activeElement!==el)el.value=data.shops[i]||"";});
 }
 
 /* MARKET */
-
 function addMarket(){
-
-let by=Number(document.getElementById("marketBy").value);
-
-let amount=Number(document.getElementById("marketAmount").value);
-
-if(!by || amount<=0)
-return alert("সঠিক সদস্য ও টাকা দিন");
-
-data.market.push({
-id:Date.now(),
-date:document.getElementById("marketDate").value,
-by:by,
-amount:amount,
-note:document.getElementById("marketNote").value
-});
-
-document.getElementById("marketAmount").value="";
-document.getElementById("marketNote").value="";
-
-save();
-
+let by=Number(document.getElementById("marketBy").value),amount=Number(document.getElementById("marketAmount").value);
+if(!by||!Number.isFinite(amount)||amount<=0)return alert("সঠিক সদস্য ও টাকার পরিমাণ দিন");
+data.market.push({id:Date.now(),date:document.getElementById("marketDate").value,by:by,amount:amount,note:document.getElementById("marketNote").value});
+document.getElementById("marketAmount").value="";document.getElementById("marketNote").value="";save();
 }
+function editMarket(id){
+let x=data.market.find(a=>a.id===id);if(!x)return;
+let amount=Number(prompt("নতুন টাকার পরিমাণ:",x.amount));if(!Number.isFinite(amount)||amount<=0)return;
+let note=prompt("বাজারের বিবরণ:",x.note||"");if(note===null)return;
+x.amount=amount;x.note=note;save();
+}
+function deleteMarket(id){if(!confirm("এই Market হিসাব মুছবেন?"))return;data.market=data.market.filter(x=>x.id!==id);save();}
 
-/* CASH */
-
+/* GUEST MEAL */
+function addGuestMeal(){
+let name=document.getElementById("guestName").value.trim();
+let date=document.getElementById("guestDate").value;
+let amount=Number(document.getElementById("guestAmount").value);
+if(!name)return alert("অতিথির নাম লিখুন");
+if(!date)return alert("খাওয়ার তারিখ দিন");
+if(!Number.isFinite(amount)||amount<=0)return alert("সঠিক টাকার পরিমাণ দিন");
+data.guestMeals.push({id:Date.now(),name,date,amount,paid:true});
+document.getElementById("guestName").value="";
+document.getElementById("guestAmount").value="";
+save();
+}
+function editGuestMeal(id){
+let x=data.guestMeals.find(a=>a.id===id);if(!x)return;
+let name=prompt("অতিথির নাম:",x.name);if(name===null)return;
+name=name.trim();if(!name)return alert("অতিথির নাম খালি রাখা যাবে না");
+let date=prompt("খাওয়ার তারিখ (YYYY-MM-DD):",x.date);if(date===null)return;
+if(!date)return alert("তারিখ দিতে হবে");
+let amount=Number(prompt("খাবারের দাম (€):",x.amount));if(!Number.isFinite(amount)||amount<=0)return alert("সঠিক টাকার পরিমাণ দিন");
+x.name=name;x.date=date;x.amount=amount;x.paid=true;save();
+}
+function deleteGuestMeal(id){
+let x=data.guestMeals.find(a=>a.id===id);if(!x)return;
+if(!confirm(x.name+" — "+money(x.amount)+"\nএই Guest Meal হিসাব মুছে ফেলবেন?"))return;
+data.guestMeals=data.guestMeals.filter(a=>a.id!==id);save();
+}
+function renderGuestMeals(){
+let rows=(data.guestMeals||[]).filter(x=>inPeriod(x.date));
+let total=rows.reduce((sum,x)=>sum+(x.paid===false?0:Number(x.amount||0)),0);
+document.getElementById("guestSummary").innerHTML=`<div class="grid"><div class="stat"><b>${rows.length}</b>অতিথির এন্ট্রি</div><div class="stat"><b>${money(total)}</b>অতিথিদের মোট আয়</div></div>`;
+document.getElementById("guestHistory").innerHTML=rows.length?`<table><tr><th>তারিখ</th><th>নাম</th><th>টাকা</th><th>Action</th></tr>${rows.map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.name)}</td><td>${money(x.amount)}</td><td><button class="gray" style="padding:7px;margin:2px" onclick="editGuestMeal(${x.id})">✏️</button><button class="red" style="padding:7px;margin:2px" onclick="deleteGuestMeal(${x.id})">🗑️</button></td></tr>`).join("")}</table>`:"এই সময়ে কোনো Guest Meal নেই।";
+}
+  /* CASH */
 function addCash(){
-
 let by=Number(document.getElementById("cashBy").value);
-
 let amount=Number(document.getElementById("cashAmount").value);
-
-if(!by || amount<=0)
-return alert("সঠিক সদস্য ও টাকা দিন");
-
-data.cash.push({
-id:Date.now(),
-date:document.getElementById("cashDate").value,
-by:by,
-amount:amount,
-note:document.getElementById("cashNote").value
-});
-
+if(!by||!Number.isFinite(amount)||amount<=0)return alert("সঠিক সদস্য ও টাকা দিন");
+data.cash.push({id:Date.now(),date:document.getElementById("cashDate").value,by:by,amount:amount,note:document.getElementById("cashNote").value});
 document.getElementById("cashAmount").value="";
 document.getElementById("cashNote").value="";
-
 save();
-
 }
 
 /* SHOP DUE */
-
 function addDue(){
-
 let shop=Number(document.getElementById("dueShop").value);
-
 let amount=Number(document.getElementById("dueAmount").value);
-
-if(amount<=0)
-return alert("টাকার পরিমাণ দিন");
-
-data.dues.push({
-id:Date.now(),
-date:document.getElementById("dueDate").value,
-shop:shop,
-amount:amount,
-note:document.getElementById("dueNote").value
-});
-  document.getElementById("dueAmount").value="";
+if(!Number.isFinite(amount)||amount<=0)return alert("টাকার পরিমাণ দিন");
+data.dues.push({id:Date.now(),date:document.getElementById("dueDate").value,shop:shop,amount:amount,note:document.getElementById("dueNote").value});
+document.getElementById("dueAmount").value="";
 document.getElementById("dueNote").value="";
-
 save();
-
 }
 
 /* SHOP PAYMENT */
-
 function addPayment(){
-
 let shop=Number(document.getElementById("paymentShop").value);
-
 let by=Number(document.getElementById("paymentBy").value);
-
 let amount=Number(document.getElementById("paymentAmount").value);
-
-if(!by || amount<=0)
-return alert("সঠিক সদস্য ও টাকা দিন");
-
-data.payments.push({
-id:Date.now(),
-date:document.getElementById("paymentDate").value,
-shop:shop,
-by:by,
-amount:amount
-});
-
+if(!by||!Number.isFinite(amount)||amount<=0)return alert("সঠিক সদস্য ও টাকা দিন");
+data.payments.push({id:Date.now(),date:document.getElementById("paymentDate").value,shop:shop,by:by,amount:amount});
 document.getElementById("paymentAmount").value="";
-
 save();
-
 }
 
 /* STATS */
-
 function stats(){
+let expense=0,due=0,cash=0,payment=0,guestIncome=0;
 
-let expense=0;
-let due=0;
-let cash=0;
-let payment=0;
+data.market.forEach(x=>{if(inPeriod(x.date))expense+=Number(x.amount);});
+data.dues.forEach(x=>{if(inPeriod(x.date))due+=Number(x.amount);});
+data.cash.forEach(x=>{if(inPeriod(x.date))cash+=Number(x.amount);});
+data.payments.forEach(x=>{if(inPeriod(x.date))payment+=Number(x.amount);});
 
-data.market.forEach(x=>{
-if(inPeriod(x.date))expense+=Number(x.amount);
+(data.guestMeals||[]).forEach(x=>{
+if(inPeriod(x.date)&&x.paid!==false)guestIncome+=Number(x.amount||0);
 });
 
-data.dues.forEach(x=>{
-if(inPeriod(x.date))due+=Number(x.amount);
-});
-
-data.cash.forEach(x=>{
-if(inPeriod(x.date))cash+=Number(x.amount);
-});
-
-data.payments.forEach(x=>{
-if(inPeriod(x.date))payment+=Number(x.amount);
-});
-
-let totalExpense=expense+due;
-
+let grossExpense=expense+due;
+let totalExpense=Math.max(0,grossExpense-guestIncome);
 let totalDays=0;
-
-data.members.forEach(m=>{
-totalDays+=activeDays(m);
-});
-
+data.members.forEach(m=>{totalDays+=activeDays(m);});
 let rate=totalDays?totalExpense/totalDays:0;
 
 let members=data.members.map(m=>{
-
-let market=0;
-let cashPaid=0;
-let shopPaid=0;
-
-data.market.forEach(x=>{
-if(x.by===m.id && inPeriod(x.date))
-market+=Number(x.amount);
-});
-
-data.cash.forEach(x=>{
-if(x.by===m.id && inPeriod(x.date))
-cashPaid+=Number(x.amount);
-});
-
-data.payments.forEach(x=>{
-if(x.by===m.id && inPeriod(x.date))
-shopPaid+=Number(x.amount);
-});
-
+let market=0,cashPaid=0,shopPaid=0;
+data.market.forEach(x=>{if(x.by===m.id&&inPeriod(x.date))market+=Number(x.amount);});
+data.cash.forEach(x=>{if(x.by===m.id&&inPeriod(x.date))cashPaid+=Number(x.amount);});
+data.payments.forEach(x=>{if(x.by===m.id&&inPeriod(x.date))shopPaid+=Number(x.amount);});
 let paid=market+cashPaid+shopPaid;
-
 let share=activeDays(m)*rate;
-
 let balance=paid-share;
-
-return {
-member:m,
-days:activeDays(m),
-share:share,
-market:market,
-cash:cashPaid,
-shopPaid:shopPaid,
-paid:paid,
-balance:balance
-};
-
+return {member:m,days:activeDays(m),share,market,cash:cashPaid,shopPaid,paid,balance};
 });
 
-return {
-expense:expense,
-due:due,
-cash:cash,
-payment:payment,
-totalExpense:totalExpense,
-totalDays:totalDays,
-rate:rate,
-members:members
-};
-
+return {expense,due,cash,payment,guestIncome,grossExpense,totalExpense,totalDays,rate,members};
 }
 
 /* RENDER */
-
 function render(){
-
 setDates();
 fillSelects();
 renderMembers();
 renderSummary();
 renderMarket();
+renderGuestMeals();
 renderCash();
 renderShops();
 renderReport();
-
 }
 
 function renderMembers(){
-
 let box=document.getElementById("memberList");
-
-if(!data.members.length){
-
-box.innerHTML="<p>কোনো সদস্য নেই।</p>";
-
-return;
-
-}
-
+if(!data.members.length){box.innerHTML="<p>কোনো সদস্য নেই।</p>";return;}
 box.innerHTML=data.members.map(m=>`
-
 <div class="member">
-
 <div class="member-name">
-
 <b>${esc(m.name)}</b>
-
-<div class="small">
-${activeDays(m)} Day
-<br>
-Join: ${esc(m.join||"-")}
-${m.leave?" • Leave: "+esc(m.leave):""}
+<div class="small">${activeDays(m)} Day<br>Join: ${esc(m.join||"-")}${m.leave?" • Leave: "+esc(m.leave):""}</div>
 </div>
-
-</div>
-
 <div class="member-actions">
-
-<button class="gray"
-onclick="editMember(${m.id})">✏️</button>
-
-<button class="red"
-onclick="removeMember(${m.id})">×</button>
-
+<button class="gray" onclick="editMember(${m.id})">✏️</button>
+<button class="red" onclick="removeMember(${m.id})">×</button>
 </div>
-
-</div>
-
-`).join("");
-
+</div>`).join("");
 }
 
 function renderSummary(){
-
 let s=stats();
-
 document.getElementById("summaryBox").innerHTML=`
-
 <div class="grid">
-
-<div class="stat">
-<b>${money(s.totalExpense)}</b>
-মোট খাবার খরচ
-</div>
-
-<div class="stat">
-<b>${money(s.rate)}</b>
-প্রতি Day
-</div>
-
-<div class="stat">
-<b>${s.totalDays}</b>
-মোট Person-Day
-</div>
-
-<div class="stat">
-<b>${money(s.cash)}</b>
-Cash জমা
-</div>
-
-</div>
-
-<br>
-
+<div class="stat"><b>${money(s.totalExpense)}</b>ভাগ করার মোট খরচ</div>
+<div class="stat"><b>${money(s.rate)}</b>প্রতি Day</div>
+<div class="stat"><b>${s.totalDays}</b>মোট Person-Day</div>
+<div class="stat"><b>${money(s.cash)}</b>Cash জমা</div>
+</div><br>
 <table>
+<tr><th>বিষয়</th><th>পরিমাণ</th></tr>
+<tr><td>🛒 Market</td><td>${money(s.expense)}</td></tr>
+<tr><td>🏪 দোকানের বাকি</td><td>${money(s.due)}</td></tr>
+<tr><td>🍽️ Guest Meal Income</td><td>${money(s.guestIncome)}</td></tr>
+<tr><td><b>অতিথির আয় বাদে ভাগ করার খরচ</b></td><td><b>${money(s.totalExpense)}</b></td></tr>
+<tr><td>💶 Cash Deposit</td><td>${money(s.cash)}</td></tr>
+<tr><td>💳 দোকান Payment</td><td>${money(s.payment)}</td></tr>
+</table>`;
 
-<tr>
-<th>বিষয়</th>
-<th>পরিমাণ</th>
-</tr>
-
-<tr>
-<td>🛒 Market</td>
-<td>${money(s.expense)}</td>
-</tr>
-
-<tr>
-<td>🏪 দোকানের বাকি</td>
-<td>${money(s.due)}</td>
-</tr>
-
-<tr>
-<td>💶 Cash Deposit</td>
-<td>${money(s.cash)}</td>
-</tr>
-
-<tr>
-<td>💳 দোকান Payment</td>
-<td>${money(s.payment)}</td>
-</tr>
-
-</table>
-
-`;
-
-document.getElementById("balanceBox").innerHTML=
-s.members.length?
-
+document.getElementById("balanceBox").innerHTML=s.members.length?
 s.members.map(x=>`
-
 <div class="balance ${x.balance>=0?"get":"pay"}">
-
 <div>
-
 <b>${esc(x.member.name)}</b>
-
-<div class="small">
-
-${x.days} Day • অংশ ${money(x.share)}
-
-<br>
-
-Market ${money(x.market)}
-+
-Cash ${money(x.cash)}
-+
-Shop ${money(x.shopPaid)}
-
+<div class="small">${x.days} Day • অংশ ${money(x.share)}<br>Market ${money(x.market)} + Cash ${money(x.cash)} + Shop ${money(x.shopPaid)}</div>
 </div>
-
-</div>
-
-<strong>
-
-${x.balance>=0?"পাবে ":"দেবে "}
-
-${money(Math.abs(x.balance))}
-
-</strong>
-
-</div>
-
-`).join("")
-
-:"কোনো সদস্য নেই।";
-
+<strong>${x.balance>=0?"পাবে ":"দেবে "}${money(Math.abs(x.balance))}</strong>
+</div>`).join(""):"কোনো সদস্য নেই।";
 }
 
 function renderMarket(){
-
-  let rows=data.market.filter(x=>inPeriod(x.date));
-
-  document.getElementById("marketHistory").innerHTML=
-
-  rows.length?
-
-  `<table>
-  <tr>
-  <th>তারিখ</th>
-  <th>নাম</th>
-  <th>টাকা</th>
-  <th>Action</th>
-  </tr>
-
-  ${rows.map(x=>{
-
-    let m=data.members.find(a=>a.id===x.by);
-
-    return `
-    <tr>
-      <td>${esc(x.date)}</td>
-      <td>${esc(m?m.name:"-")}</td>
-      <td>${money(x.amount)}</td>
-      <td>
-        <button
-          style="padding:7px;margin:2px"
-          onclick="editMarket(${x.id})">✏️</button>
-
-        <button
-          class="red"
-          style="padding:7px;margin:2px"
-          onclick="deleteMarket(${x.id})">🗑️</button>
-      </td>
-    </tr>
-    `;
-
-  }).join("")}
-
-  </table>`
-
-  :"কোনো Market খরচ নেই।";
-
+let rows=data.market.filter(x=>inPeriod(x.date));
+document.getElementById("marketHistory").innerHTML=rows.length?
+`<table><tr><th>তারিখ</th><th>নাম</th><th>টাকা</th><th>Action</th></tr>
+${rows.map(x=>{
+let m=data.members.find(a=>a.id===x.by);
+return `<tr><td>${esc(x.date)}</td><td>${esc(m?m.name:"-")}</td><td>${money(x.amount)}</td>
+<td><button style="padding:7px;margin:2px" onclick="editMarket(${x.id})">✏️</button>
+<button class="red" style="padding:7px;margin:2px" onclick="deleteMarket(${x.id})">🗑️</button></td></tr>`;
+}).join("")}</table>`:"কোনো Market খরচ নেই।";
 }
 
 function renderCash(){
-
 let rows=data.cash.filter(x=>inPeriod(x.date));
-
-document.getElementById("cashHistory").innerHTML=
-
-rows.length?
-
-`<table>
-<tr>
-<th>তারিখ</th>
-<th>নাম</th>
-<th>টাকা</th>
-</tr>
-
+document.getElementById("cashHistory").innerHTML=rows.length?
+`<table><tr><th>তারিখ</th><th>নাম</th><th>টাকা</th></tr>
 ${rows.map(x=>{
-
 let m=data.members.find(a=>a.id===x.by);
-
-return `
-<tr>
-<td>${x.date}</td>
-<td>${esc(m?m.name:"-")}</td>
-<td>${money(x.amount)}</td>
-</tr>
-`;
-
-}).join("")}
-
-</table>`
-
-:"কোনো Cash জমা নেই।";
-
+return `<tr><td>${esc(x.date)}</td><td>${esc(m?m.name:"-")}</td><td>${money(x.amount)}</td></tr>`;
+}).join("")}</table>`:"কোনো Cash জমা নেই।";
 }
 
 function renderShops(){
-
-let box=document.getElementById("shopSummary");
-
-box.innerHTML=data.shops.map((shop,i)=>{
-
-let due=0;
-let paid=0;
-
-data.dues.forEach(x=>{
-if(x.shop===i && inPeriod(x.date))
-due+=Number(x.amount);
-});
-
-data.payments.forEach(x=>{
-if(x.shop===i && inPeriod(x.date))
-paid+=Number(x.amount);
-});
-
-return `
-
-<div class="shop">
-
-<b>🏪 ${esc(shop)}</b>
-
-<br>
-
-<span class="small">
-বাকি: ${money(due)}
-&nbsp; | &nbsp;
-পরিশোধ: ${money(paid)}
-</span>
-
-<br><br>
-
-<strong>
-বর্তমান বাকি: ${money(due-paid)}
-</strong>
-
-</div>
-
-`;
-
+document.getElementById("shopSummary").innerHTML=data.shops.map((shop,i)=>{
+let due=0,paid=0;
+data.dues.forEach(x=>{if(x.shop===i&&inPeriod(x.date))due+=Number(x.amount);});
+data.payments.forEach(x=>{if(x.shop===i&&inPeriod(x.date))paid+=Number(x.amount);});
+return `<div class="shop"><b>🏪 ${esc(shop)}</b><br>
+<span class="small">বাকি: ${money(due)} &nbsp; | &nbsp; পরিশোধ: ${money(paid)}</span><br><br>
+<strong>বর্তমান বাকি: ${money(due-paid)}</strong></div>`;
 }).join("");
-
 }
 
 function saveShops(){
-
 let a=document.getElementById("shop1").value.trim();
 let b=document.getElementById("shop2").value.trim();
 let c=document.getElementById("shop3").value.trim();
-
 if(a)data.shops[0]=a;
 if(b)data.shops[1]=b;
 if(c)data.shops[2]=c;
-
 save();
-
 alert("দোকানের নাম Save হয়েছে ✅");
-
 }
 
 function renderReport(){
-
-let s=stats();
-
-let start=data.start;
-let end=document.getElementById("endDate").value;
-
+let s=stats(),start=data.start,end=document.getElementById("endDate").value;
 document.getElementById("reportContent").innerHTML=`
-
 <h3>🏠 Mess Hisab</h3>
-
-<p>
-<b>সময়:</b> ${start} → ${end}
-</p>
-
-<p>
-<b>মোট খাবার খরচ:</b> ${money(s.totalExpense)}
-</p>
-
-<p>
-<b>মোট Person-Day:</b> ${s.totalDays}
-</p>
-
-<p>
-<b>প্রতি Day:</b> ${money(s.rate)}
-</p>
-
+<p><b>সময়:</b> ${start} → ${end}</p>
+<p><b>বাজারের খরচ:</b> ${money(s.expense)}</p>
+<p><b>দোকানের বাকি যোগ:</b> ${money(s.due)}</p>
+<p><b>🍽️ Guest Meal থেকে আয়:</b> ${money(s.guestIncome)}</p>
+<p><b>অতিথির আয় বাদে ভাগ করার খরচ:</b> ${money(s.totalExpense)}</p>
+<p><b>মোট Person-Day:</b> ${s.totalDays}</p>
+<p><b>প্রতি Day:</b> ${money(s.rate)}</p>
 <table>
-
-<tr>
-<th>Member</th>
-<th>Day</th>
-<th>অংশ</th>
-<th>দিয়েছে</th>
-<th>Final</th>
-</tr>
-
-${s.members.map(x=>`
-
-<tr>
-
-<td>${esc(x.member.name)}</td>
-
-<td>${x.days}</td>
-
-<td>${money(x.share)}</td>
-
-<td>${money(x.paid)}</td>
-
-<td>
-
-<b>
-${x.balance>=0?"পাবে ":"দেবে "}
-${money(Math.abs(x.balance))}
-</b>
-
-</td>
-
-</tr>
-
-`).join("")}
-
-</table>
-
-<br>
-
-<h3>🏪 Shops</h3>
-
-<table>
-
-<tr>
-<th>Shop</th>
-<th>Due</th>
-<th>Paid</th>
-<th>Balance</th>
-</tr>
-
+<tr><th>Member</th><th>Day</th><th>অংশ</th><th>দিয়েছে</th><th>Final</th></tr>
+${s.members.map(x=>`<tr><td>${esc(x.member.name)}</td><td>${x.days}</td><td>${money(x.share)}</td><td>${money(x.paid)}</td><td><b>${x.balance>=0?"পাবে ":"দেবে "}${money(Math.abs(x.balance))}</b></td></tr>`).join("")}
+</table><br><h3>🏪 Shops</h3>
+<table><tr><th>Shop</th><th>Due</th><th>Paid</th><th>Balance</th></tr>
 ${data.shops.map((shop,i)=>{
-
-let due=0;
-let paid=0;
-
-data.dues.forEach(x=>{
-if(x.shop===i && inPeriod(x.date))
-due+=Number(x.amount);
-});
-
-data.payments.forEach(x=>{
-if(x.shop===i && inPeriod(x.date))
-paid+=Number(x.amount);
-});
-
-return `
-
-<tr>
-<td>${esc(shop)}</td>
-<td>${money(due)}</td>
-<td>${money(paid)}</td>
-<td>${money(due-paid)}</td>
-</tr>
-
-`;
-
+let due=0,paid=0;
+data.dues.forEach(x=>{if(x.shop===i&&inPeriod(x.date))due+=Number(x.amount);});
+data.payments.forEach(x=>{if(x.shop===i&&inPeriod(x.date))paid+=Number(x.amount);});
+return `<tr><td>${esc(shop)}</td><td>${money(due)}</td><td>${money(paid)}</td><td>${money(due-paid)}</td></tr>`;
 }).join("")}
-
-</table>
-
-`;
-
+</table>`;
 }
-
-/* BACKUP */
-
+  /* BACKUP */
 function backup(){
-
-let blob=new Blob(
-[JSON.stringify(data,null,2)],
-{type:"application/json"}
-);
-
+let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
 let url=URL.createObjectURL(blob);
-
 let a=document.createElement("a");
-
 a.href=url;
 a.download="mess-hisab-backup.json";
-
 a.click();
-
 URL.revokeObjectURL(url);
-
 }
 
 function restore(event){
-
 let file=event.target.files[0];
-
 if(!file)return;
-
 let reader=new FileReader();
-
 reader.onload=function(){
-
 try{
-
 let x=JSON.parse(reader.result);
-
-if(
-!x.members ||
-!x.market ||
-!x.cash ||
-!x.dues ||
-!x.payments
-)throw Error();
-
+if(!x.members||!x.market||!x.cash||!x.dues||!x.payments)throw Error();
+if(!Array.isArray(x.guestMeals))x.guestMeals=[];
 data=x;
-
 save();
-
 alert("Backup Restore হয়েছে ✅");
-
 }catch(e){
-
 alert("Backup file সঠিক নয়।");
-
 }
-
 };
-
 reader.readAsText(file);
-
 }
 
 function clearAll(){
-
 if(!confirm("সব হিসাব মুছে ফেলবেন?"))return;
-
 if(!confirm("শেষবার নিশ্চিত করুন। সব Data মুছে যাবে!"))return;
-
-data={
-start:today(),
-members:[],
-market:[],
-cash:[],
-dues:[],
-payments:[],
-shops:["দোকান ১","দোকান ২","দোকান ৩"]
-};
-  save();
-
+data={start:today(),members:[],market:[],cash:[],dues:[],payments:[],guestMeals:[],shops:["দোকান ১","দোকান ২","দোকান ৩"]};
+save();
 }
 
 /* START */
-
-if(!data.start)
-data.start=today();
-
-if(!data.shops || data.shops.length!==3)
-data.shops=["দোকান ১","দোকান ২","দোকান ৩"];
-
+if(!data.start)data.start=today();
+if(!data.shops||data.shops.length!==3)data.shops=["দোকান ১","দোকান ২","দোকান ৩"];
 setDates();
 render();
-
 </script>
-
 </body>
 </html>
